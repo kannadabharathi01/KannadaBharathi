@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X, ChevronRight, Info, Award, UserPlus, BookOpen, MapPin, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabaseClient";
 
 const dropdownLinks = [
   { href: "/movement", label: "ಆಂದೋಲನದ ವಿವರ", desc: "ಆಂದೋಲನದ ೬ ಹಂತದ ಕ್ರಿಯಾಯೋಜನೆ", icon: <Info className="w-4 h-4" /> },
@@ -20,6 +21,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownHovered, setIsDropdownHovered] = useState(false);
   const [isMobileSubmenuOpen, setIsMobileSubmenuOpen] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
 
   // Sliding pill navigation indicator state
   const [activeRect, setActiveRect] = useState({ left: 0, width: 0, height: 0, top: 0 });
@@ -68,6 +70,26 @@ export default function Header() {
       clearTimeout(timer);
     };
   }, [pathname, isCampaignRoute]);
+
+  useEffect(() => {
+    if (!pathname.startsWith("/volunteer/admin")) {
+      setIsAdminLoggedIn(false);
+      return;
+    }
+
+    // Check active session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [pathname]);
+
+  if (isAdminLoggedIn) return null;
 
   return (
     <header className="sticky top-3 z-40 flex justify-center px-4 w-full print:hidden mt-3 mb-2">

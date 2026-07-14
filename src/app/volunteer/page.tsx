@@ -7,12 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ScrollReveal from "@/components/shared/ScrollReveal";
+import { supabase } from "@/lib/supabaseClient";
 
 type RoleType = "learner" | "teacher" | "mentor" | "organizer" | "donor";
 
 export default function VolunteerPage() {
   const [activeTab, setActiveTab] = useState<RoleType>("learner");
   const [submittedId, setSubmittedId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   // Shared state for forms
   const [formData, setFormData] = useState({
@@ -56,10 +59,15 @@ export default function VolunteerPage() {
       linkedId3: "",
     });
     setSubmittedId(null);
+    setError(null);
+    setIsSubmitting(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
     const prefixMap: Record<RoleType, string> = {
       learner: "LRN",
       teacher: "TCH",
@@ -69,14 +77,64 @@ export default function VolunteerPage() {
     };
     const randNum = Math.floor(1000 + Math.random() * 9000);
     const generatedId = `KB-2026-${prefixMap[activeTab]}-${randNum}`;
-    setSubmittedId(generatedId);
+
+    try {
+      let table = "";
+      let payload: Record<string, any> = {
+        id: generatedId,
+        name: formData.name,
+        age: parseInt(formData.age) || 0,
+        gender: formData.gender,
+        guardian: formData.guardian,
+        constituency: formData.constituency,
+        representative: formData.representative,
+      };
+
+      if (activeTab === "learner") {
+        table = "learners_registration";
+        payload.mother_tongue = formData.motherTongue;
+        payload.native_place = formData.nativePlace;
+        payload.occupation = formData.occupation || null;
+      } else if (activeTab === "teacher") {
+        table = "teachers_registration";
+        payload.school = formData.school;
+        payload.linked_id_1 = formData.linkedId1;
+      } else if (activeTab === "mentor") {
+        table = "mentors_registration";
+        payload.occupation = formData.occupation;
+        payload.linked_id_1 = formData.linkedId1;
+      } else if (activeTab === "organizer") {
+        table = "organizers_registration";
+        payload.occupation = formData.occupation;
+        payload.linked_id_1 = formData.linkedId1;
+      } else if (activeTab === "donor") {
+        table = "donors_registration";
+        payload.school = formData.school;
+        payload.linked_id_1 = formData.linkedId1;
+      }
+
+      const { error: insertError } = await supabase.from(table).insert([payload]);
+
+      if (insertError) {
+        throw new Error(insertError.message);
+      }
+
+      setSubmittedId(generatedId);
+    } catch (err: any) {
+      console.error("Supabase insert error:", err);
+      setError("ನೋಂದಣಿ ವೈಫಲ್ಯ: " + (err.message || "ದಯವಿಟ್ಟು ಸಂಪರ್ಕ ಸಾಧನಗಳನ್ನು ಪರಿಶೀಲಿಸಿ."));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-12">
       {/* Back button */}
       <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#ED1C24] mb-8 transition-colors">
-        <ArrowLeft className="w-4 h-4" />
+        <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no">
+          <ArrowLeft className="w-4 h-4" />
+        </span>
         <span>ಮುಖಪುಟಕ್ಕೆ ಮರಳಿ</span>
       </Link>
 
@@ -93,13 +151,13 @@ export default function VolunteerPage() {
 
       {/* Custom Tabs Navigation */}
       <ScrollReveal delay={100}>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mb-10 max-w-3xl mx-auto glass p-2.5 rounded-2xl border border-white/60 shadow-md">
+        <div className="flex flex-row items-center justify-start md:justify-center gap-2 mb-10 max-w-3xl mx-auto glass p-1.5 rounded-2xl border border-white/60 shadow-md scrollbar-none w-full flex-nowrap overflow-x-auto">
           {[
-            { id: "learner", label: "ಕಲಿಯುವವರು", icon: <UserPlus className="w-4 h-4" /> },
-            { id: "teacher", label: "ಕಲಿಸುವ ಮಕ್ಕಳು", icon: <Users className="w-4 h-4" /> },
-            { id: "mentor", label: "ಮಾರ್ಗದರ್ಶಕರು", icon: <Award className="w-4 h-4" /> },
-            { id: "organizer", label: "ಸಂಘಟಕರು", icon: <Shield className="w-4 h-4" /> },
-            { id: "donor", label: "ದಾನಿಗಳು", icon: <IndianRupee className="w-4 h-4" /> },
+            { id: "learner", label: "ಕಲಿಯುವವರು", icon: <UserPlus className="w-5 h-5" /> },
+            { id: "teacher", label: "ಕಲಿಸುವ ಮಕ್ಕಳು", icon: <Users className="w-5 h-5" /> },
+            { id: "mentor", label: "ಮಾರ್ಗದರ್ಶಕರು", icon: <Award className="w-5 h-5" /> },
+            { id: "organizer", label: "ಸಂಘಟಕರು", icon: <Shield className="w-5 h-5" /> },
+            { id: "donor", label: "ದಾನಿಗಳು", icon: <IndianRupee className="w-5 h-5" /> },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -107,13 +165,15 @@ export default function VolunteerPage() {
                 setActiveTab(tab.id as RoleType);
                 setSubmittedId(null);
               }}
-              className={`flex items-center justify-center gap-1.5 py-3 px-2 rounded-xl text-xs md:text-sm font-bold transition-all ${
+              className={`flex items-center justify-center gap-1.5 py-1.5 px-3.5 md:py-2 md:px-5 rounded-xl text-[10px] sm:text-xs md:text-sm font-extrabold transition-all whitespace-nowrap flex-shrink-0 ${
                 activeTab === tab.id
                   ? "bg-[#ED1C24] text-white shadow-md active:scale-95"
                   : "text-gray-600 hover:bg-gray-100/60 hover:text-[#ED1C24]"
               }`}
             >
-              {tab.icon}
+              <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no">
+                {tab.icon}
+              </span>
               <span>{tab.label}</span>
             </button>
           ))}
@@ -127,7 +187,9 @@ export default function VolunteerPage() {
             /* Success Screen */
             <div className="text-center py-10 space-y-6 animate-in fade-in zoom-in-95 duration-200">
               <div className="w-20 h-20 bg-green-50/50 border border-green-200 text-green-600 rounded-full mx-auto flex items-center justify-center shadow-inner">
-                <CheckCircle2 className="w-12 h-12" />
+                <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no">
+                  <CheckCircle2 className="w-12 h-12" />
+                </span>
               </div>
               <div className="space-y-2">
                 <h3 className="text-2xl font-heading font-extrabold text-green-700">ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿದೆ!</h3>
@@ -148,11 +210,11 @@ export default function VolunteerPage() {
                 <div className="flex justify-between border-b border-amber-200/50 pb-2">
                   <span className="text-xs font-bold text-gray-400 uppercase">ಪಾತ್ರ</span>
                   <span className="text-sm font-bold text-[#D18C00]">
-                    {activeTab === "learner" && "ಕಲಿಯುವವರು (Form 1)"}
-                    {activeTab === "teacher" && "ಕಲಿಸುವ ಮಗು (Form 2)"}
-                    {activeTab === "mentor" && "ಮಾರ್ಗದರ್ಶಕರು (Form 3)"}
-                    {activeTab === "organizer" && "ಸಂಘಟಕರು (Form 4)"}
-                    {activeTab === "donor" && "ದಾನಿಗಳು (Form 5)"}
+                    {activeTab === "learner" && <span>ಕಲಿಯುವವರು (Form 1)</span>}
+                    {activeTab === "teacher" && <span>ಕಲಿಸುವ ಮಗು (Form 2)</span>}
+                    {activeTab === "mentor" && <span>ಮಾರ್ಗದರ್ಶಕರು (Form 3)</span>}
+                    {activeTab === "organizer" && <span>ಸಂಘಟಕರು (Form 4)</span>}
+                    {activeTab === "donor" && <span>ದಾನಿಗಳು (Form 5)</span>}
                   </span>
                 </div>
                 <div className="flex justify-between pb-1">
@@ -172,11 +234,11 @@ export default function VolunteerPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="border-b border-amber-100/50 pb-4 mb-6">
                 <h3 className="text-xl font-heading font-extrabold text-gray-800">
-                  {activeTab === "learner" && "ಕಲಿಯುವವರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 1)"}
-                  {activeTab === "teacher" && "ಕಲಿಸುವ ಮಗುವಿನ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 2)"}
-                  {activeTab === "mentor" && "ಮಾರ್ಗದರ್ಶಕರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 3)"}
-                  {activeTab === "organizer" && "ಸಂಘಟಕರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 4)"}
-                  {activeTab === "donor" && "ದಾನಿಗಳ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 5)"}
+                  {activeTab === "learner" && <span>ಕಲಿಯುವವರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 1)</span>}
+                  {activeTab === "teacher" && <span>ಕಲಿಸುವ ಮಗುವಿನ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 2)</span>}
+                  {activeTab === "mentor" && <span>ಮಾರ್ಗದರ್ಶಕರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 3)</span>}
+                  {activeTab === "organizer" && <span>ಸಂಘಟಕರ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 4)</span>}
+                  {activeTab === "donor" && <span>ದಾನಿಗಳ ಮಾಹಿತಿ ಭರ್ತಿ ಮಾಡಿ (FORM 5)</span>}
                 </h3>
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block mt-1">
                   * ಎಲ್ಲಾ ಫಾರ್ಮ್ ಕ್ಷೇತ್ರಗಳು ಕಡ್ಡಾಯವಾಗಿವೆ
@@ -213,7 +275,7 @@ export default function VolunteerPage() {
                 {/* Name */}
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2">
-                    {activeTab === "teacher" ? "ಮಗುವಿನ ಪೂರ್ಣ ಹೆಸರು" : "ಪೂರ್ಣ ಹೆಸರು"}
+                    {activeTab === "teacher" ? <span>ಮಗುವಿನ ಪೂರ್ಣ ಹೆಸರು</span> : <span>ಪೂರ್ಣ ಹೆಸರು</span>}
                   </label>
                   <Input
                     type="text"
@@ -424,9 +486,19 @@ export default function VolunteerPage() {
                 />
               </div>
 
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm font-bold rounded-xl text-center">
+                  <span>{error}</span>
+                </div>
+              )}
+
               <div className="text-center pt-4">
-                <Button type="submit" className="bg-[#ED1C24] hover:bg-[#D11820] text-white py-6 px-12 rounded-full font-bold text-base shadow-lg shadow-[#ED1C24]/10 transition-transform active:scale-95 duration-200">
-                  ನೋಂದಾಯಿಸಿಕೊಳ್ಳಿ
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="bg-[#ED1C24] hover:bg-[#D11820] text-white py-6 px-12 rounded-full font-bold text-base shadow-lg shadow-[#ED1C24]/10 transition-transform active:scale-95 duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? "ನೋಂದಾಯಿಸಲಾಗುತ್ತಿದೆ..." : "ನೋಂದಾಯಿಸಿಕೊಳ್ಳಿ"}
                 </Button>
               </div>
             </form>

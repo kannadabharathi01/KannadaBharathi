@@ -1,9 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (!pathname.startsWith("/volunteer/admin")) {
+      setIsAdminLoggedIn(false);
+      return;
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdminLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [pathname]);
+
+  if (isAdminLoggedIn) return null;
+
   return (
     <footer className="bg-[#1A1A1A] text-white pt-16 pb-8 border-t border-amber-500/20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
