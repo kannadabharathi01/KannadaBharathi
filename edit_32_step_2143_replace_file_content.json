@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Add useRouter to imports in volunteer/page.tsx",
+  "EndLine": 15,
+  "Instruction": "Import useRouter from next/navigation in volunteer/page.tsx",
+  "ReplacementContent": "import { useRouter } from \"next/navigation\";\nimport { supabase } from \"@/lib/supabaseClient\";",
+  "StartLine": 14,
+  "TargetContent": "import { supabase } from \"@/lib/supabaseClient\";",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Adding useRouter to volunteer/page.tsx imports",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

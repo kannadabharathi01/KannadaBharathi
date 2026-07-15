@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Initialize useRouter and add session redirects to volunteer/[id] in the on-mount and auth change listeners",
+  "EndLine": 126,
+  "Instruction": "Define router = useRouter() and update both useEffect hooks in volunteer/page.tsx to automatically route authenticated users to their UUID-bound dashboard page",
+  "ReplacementContent": "    partyName: \"\",\n    electionYear: \"\",\n    officeAddress: \"\",\n  });\n\n  const router = useRouter();\n\n  // Check auth session and redirect to dynamic dashboard on mount\n  useEffect(() => {\n    supabase.auth.getSession().then(async ({ data: { session } }) => {\n      if (session) {\n        router.replace(`/volunteer/${session.user.id}`);\n      }\n    });\n\n    // Check query params for password reset trigger\n    const query = new URLSearchParams(window.location.search);\n    if (query.get(\"reset\") === \"true\" || window.location.hash.includes(\"type=recovery\")) {\n      setViewMode(\"reset\");\n    }\n  }, [router]);\n\n  // Monitor auth changes and redirect\n  useEffect(() => {\n    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {\n      if (session) {\n        router.replace(`/volunteer/${session.user.id}`);\n      } else {\n        setUserSession(null);\n        setProfileData(null);\n      }\n    });",
+  "StartLine": 94,
+  "TargetContent": "    partyName: \"\",\n    electionYear: \"\",\n    officeAddress: \"\",\n  });\n\n  // Check auth session and reset flows on mount\n  useEffect(() => {\n    supabase.auth.getSession().then(async ({ data: { session } }) => {\n      if (session) {\n        setUserSession(session);\n        fetchUserProfile(session.user.id);\n      }\n    });\n\n    // Check query params for password reset trigger\n    const query = new URLSearchParams(window.location.search);\n    if (query.get(\"reset\") === \"true\" || window.location.hash.includes(\"type=recovery\")) {\n      setViewMode(\"reset\");\n    }\n  }, []);\n\n  // Monitor auth changes\n  useEffect(() => {\n    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {\n      if (session) {\n        setUserSession(session);\n        fetchUserProfile(session.user.id);\n      } else {\n        setUserSession(null);\n        setProfileData(null);\n      }\n    });",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Adding dynamic redirect hooks to volunteer page mount logic",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Fix resetForm type error by adding partyName, electionYear, and officeAddress properties to the initialized object",
+  "EndLine": 192,
+  "Instruction": "Update the setFormData call in resetForm to include the newly added fields for MLA registration",
+  "ReplacementContent": "  const resetForm = () => {\n    setFormData({\n      constituency: \"\",\n      representative: \"\",\n      name: \"\",\n      age: \"\",\n      gender: \"M\",\n      guardian: \"\",\n      motherTongue: \"\u0c95\u0ca8\u0ccd\u0ca8\u0ca1\",\n      nativePlace: \"\",\n      occupation: \"\",\n      school: \"\",\n      details: \"\",\n      email: \"\",\n      password: \"\",\n      confirmPassword: \"\",\n      linkedId1: \"\",\n      linkedId2: \"\",\n      linkedId3: \"\",\n      partyName: \"\",\n      electionYear: \"\",\n      officeAddress: \"\",\n    });",
+  "StartLine": 172,
+  "TargetContent": "  const resetForm = () => {\n    setFormData({\n      constituency: \"\",\n      representative: \"\",\n      name: \"\",\n      age: \"\",\n      gender: \"M\",\n      guardian: \"\",\n      motherTongue: \"\u0c95\u0ca8\u0ccd\u0ca8\u0ca1\",\n      nativePlace: \"\",\n      occupation: \"\",\n      school: \"\",\n      details: \"\",\n      email: \"\",\n      password: \"\",\n      confirmPassword: \"\",\n      linkedId1: \"\",\n      linkedId2: \"\",\n      linkedId3: \"\",\n    });",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Fixing type mismatch inside resetForm function",
+  "toolSummary": "Modify resetForm in page.tsx"
+}

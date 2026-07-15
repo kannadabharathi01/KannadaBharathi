@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Remove fetchUserProfile from volunteer/page.tsx as it is now handled in volunteer/[id]/page.tsx",
+  "EndLine": 146,
+  "Instruction": "Delete the fetchUserProfile function block",
+  "ReplacementContent": "    return () => subscription.unsubscribe();\n  }, [router]);",
+  "StartLine": 127,
+  "TargetContent": "    return () => subscription.unsubscribe();\n  }, [router]);\n\n  // Fetch full volunteer details\n  const fetchUserProfile = async (userId: string) => {\n    try {\n      const { data, error } = await supabase\n        .from(\"user_roles\")\n        .select(\"*\")\n        .eq(\"id\", userId)\n        .single();\n      if (!error && data) {\n        setProfileData(data);\n      }\n    } catch (err) {\n      console.error(\"Error fetching user profile:\", err);\n    }\n  };",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Removing fetchUserProfile from volunteer/page.tsx",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Remove extra closing curly brace on line 1492 to resolve compilation error",
+  "EndLine": 1493,
+  "Instruction": "Remove the second closing curly brace so the VolunteerPage function ends with a single closing brace on line 1491",
+  "ReplacementContent": "      </div>\n    );\n  }",
+  "StartLine": 1489,
+  "TargetContent": "      </div>\n    );\n  }\n}",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Removing extra closing brace in volunteer/page.tsx",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

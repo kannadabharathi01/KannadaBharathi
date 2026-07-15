@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Remove extra closing curly brace at the end of VolunteerPage component to fix Turbopack compilation error",
+  "EndLine": 1493,
+  "Instruction": "Remove the duplicate closing curly brace on line 1492 so the file compiles successfully",
+  "ReplacementContent": "      </div>\n    );\n  }\n}",
+  "StartLine": 1489,
+  "TargetContent": "      </div>\n    );\n  }\n}",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Removing extra curly brace to resolve syntax error",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

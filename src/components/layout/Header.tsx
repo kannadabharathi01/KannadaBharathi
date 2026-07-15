@@ -71,25 +71,22 @@ export default function Header() {
     };
   }, [pathname, isCampaignRoute]);
 
-  useEffect(() => {
-    if (!pathname.startsWith("/volunteer/admin")) {
-      setIsAdminLoggedIn(false);
-      return;
-    }
+  const [isLogged, setIsLogged] = useState(false);
 
-    // Check active session on mount
+  useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAdminLoggedIn(!!session);
+      setIsLogged(!!session);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdminLoggedIn(!!session);
+      setIsLogged(!!session);
     });
 
     return () => subscription.unsubscribe();
-  }, [pathname]);
+  }, []);
 
-  if (isAdminLoggedIn) return null;
+  const isDashboardRoute = pathname.startsWith("/volunteer/") || pathname.startsWith("/volunteer/admin");
+  if (isDashboardRoute) return null;
 
   return (
     <header className="sticky top-3 z-40 flex justify-center px-4 w-full print:hidden mt-3 mb-2">

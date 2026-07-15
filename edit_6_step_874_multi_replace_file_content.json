@@ -1,0 +1,35 @@
+{
+  "ArtifactMetadata": {
+    "RequestFeedback": false,
+    "Summary": "Increase volunteer page icon sizes and wrap them in notranslate spans to prevent translation corruption.",
+    "UserFacing": true
+  },
+  "Description": "Enlarge tab icons to w-5 h-5 and wrap all page icons (back button, tab icons, success checkmark) in translate=\"no\" spans to block Google Translate SVG corruption.",
+  "Instruction": "Enlarge and wrap volunteer page icons for Google Translate protection",
+  "ReplacementChunks": [
+    {
+      "AllowMultiple": false,
+      "EndLine": 81,
+      "ReplacementContent": "      <Link href=\"/\" className=\"inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#ED1C24] mb-8 transition-colors\">\n        <span className=\"notranslate flex-shrink-0 flex items-center justify-center\" translate=\"no\">\n          <ArrowLeft className=\"w-4 h-4\" />\n        </span>\n        <span>\u0cae\u0cc1\u0c96\u0caa\u0cc1\u0c9f\u0c95\u0ccd\u0c95\u0cc6 \u0cae\u0cb0\u0cb3\u0cbf</span>\n      </Link>",
+      "StartLine": 78,
+      "TargetContent": "      <Link href=\"/\" className=\"inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#ED1C24] mb-8 transition-colors\">\n        <ArrowLeft className=\"w-4 h-4\" />\n        <span>\u0cae\u0cc1\u0c96\u0caa\u0cc1\u0c9f\u0c95\u0ccd\u0c95\u0cc6 \u0cae\u0cb0\u0cb3\u0cbf</span>\n      </Link>"
+    },
+    {
+      "AllowMultiple": false,
+      "EndLine": 119,
+      "ReplacementContent": "        <div className=\"flex flex-row overflow-x-auto gap-2 mb-10 max-w-3xl mx-auto glass p-1.5 rounded-2xl border border-white/60 shadow-md scrollbar-none w-full flex-nowrap md:grid md:grid-cols-5\">\n          {[\n            { id: \"learner\", label: \"\u0c95\u0cb2\u0cbf\u0caf\u0cc1\u0cb5\u0cb5\u0cb0\u0cc1\", icon: <UserPlus className=\"w-5 h-5\" /> },\n            { id: \"teacher\", label: \"\u0c95\u0cb2\u0cbf\u0cb8\u0cc1\u0cb5 \u0cae\u0c95\u0ccd\u0c95\u0cb3\u0cc1\", icon: <Users className=\"w-5 h-5\" /> },\n            { id: \"mentor\", label: \"\u0cae\u0cbe\u0cb0\u0ccd\u0c97\u0ca6\u0cb0\u0ccd\u0cb6\u0c95\u0cb0\u0cc1\", icon: <Award className=\"w-5 h-5\" /> },\n            { id: \"organizer\", label: \"\u0cb8\u0c82\u0c98\u0c9f\u0c95\u0cb0\u0cc1\", icon: <Shield className=\"w-5 h-5\" /> },\n            { id: \"donor\", label: \"\u0ca6\u0cbe\u0ca8\u0cbf\u0c97\u0cb3\u0cc1\", icon: <IndianRupee className=\"w-5 h-5\" /> },\n          ].map((tab) => (\n            <button\n              key={tab.id}\n              onClick={() => {\n                setActiveTab(tab.id as RoleType);\n                setSubmittedId(null);\n              }}\n              className={`flex items-center justify-center gap-1.5 py-2 px-3.5 md:py-2 md:px-2 rounded-xl text-[10px] sm:text-xs md:text-sm font-extrabold transition-all whitespace-nowrap flex-shrink-0 flex-1 md:flex-initial ${\n                activeTab === tab.id\n                  ? \"bg-[#ED1C24] text-white shadow-md active:scale-95\"\n                  : \"text-gray-600 hover:bg-gray-100/60 hover:text-[#ED1C24]\"\n              }`}\n            >\n              <span className=\"notranslate flex-shrink-0 flex items-center justify-center\" translate=\"no\">\n                {tab.icon}\n              </span>\n              <span>{tab.label}</span>\n            </button>\n          ))}\n        </div>",
+      "StartLine": 96,
+      "TargetContent": "        <div className=\"flex flex-row overflow-x-auto gap-2 mb-10 max-w-3xl mx-auto glass p-1.5 rounded-2xl border border-white/60 shadow-md scrollbar-none w-full flex-nowrap md:grid md:grid-cols-5\">\n          {[\n            { id: \"learner\", label: \"\u0c95\u0cb2\u0cbf\u0caf\u0cc1\u0cb5\u0cb5\u0cb0\u0cc1\", icon: <UserPlus className=\"w-4 h-4\" /> },\n            { id: \"teacher\", label: \"\u0c95\u0cb2\u0cbf\u0cb8\u0cc1\u0cb5 \u0cae\u0c95\u0ccd\u0c95\u0cb3\u0cc1\", icon: <Users className=\"w-4 h-4\" /> },\n            { id: \"mentor\", label: \"\u0cae\u0cbe\u0cb0\u0ccd\u0c97\u0ca6\u0cb0\u0ccd\u0cb6\u0c95\u0cb0\u0cc1\", icon: <Award className=\"w-4 h-4\" /> },\n            { id: \"organizer\", label: \"\u0cb8\u0c82\u0c98\u0c9f\u0c95\u0cb0\u0cc1\", icon: <Shield className=\"w-4 h-4\" /> },\n            { id: \"donor\", label: \"\u0ca6\u0cbe\u0ca8\u0cbf\u0c97\u0cb3\u0cc1\", icon: <IndianRupee className=\"w-4 h-4\" /> },\n          ].map((tab) => (\n            <button\n              key={tab.id}\n              onClick={() => {\n                setActiveTab(tab.id as RoleType);\n                setSubmittedId(null);\n              }}\n              className={`flex items-center justify-center gap-1.5 py-2 px-3.5 md:py-2 md:px-2 rounded-xl text-[10px] sm:text-xs md:text-sm font-extrabold transition-all whitespace-nowrap flex-shrink-0 flex-1 md:flex-initial ${\n                activeTab === tab.id\n                  ? \"bg-[#ED1C24] text-white shadow-md active:scale-95\"\n                  : \"text-gray-600 hover:bg-gray-100/60 hover:text-[#ED1C24]\"\n              }`}\n            >\n              {tab.icon}\n              <span>{tab.label}</span>\n            </button>\n          ))}\n        </div>"
+    },
+    {
+      "AllowMultiple": false,
+      "EndLine": 132,
+      "ReplacementContent": "              <div className=\"w-20 h-20 bg-green-50/50 border border-green-200 text-green-600 rounded-full mx-auto flex items-center justify-center shadow-inner\">\n                <span className=\"notranslate flex-shrink-0 flex items-center justify-center\" translate=\"no\">\n                  <CheckCircle2 className=\"w-12 h-12\" />\n                </span>\n              </div>",
+      "StartLine": 129,
+      "TargetContent": "              <div className=\"w-20 h-20 bg-green-50/50 border border-green-200 text-green-600 rounded-full mx-auto flex items-center justify-center shadow-inner\">\n                <CheckCircle2 className=\"w-12 h-12\" />\n              </div>"
+    }
+  ],
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Applying Google Translate icon protection and size increase to volunteer/page.tsx",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

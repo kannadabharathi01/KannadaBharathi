@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Add supabase import to volunteer/page.tsx to enable database submissions",
+  "EndLine": 10,
+  "Instruction": "Import supabase client at the top of the file",
+  "ReplacementContent": "\"use client\";\n\nimport React, { useState } from \"react\";\nimport Link from \"next/link\";\nimport { ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, CheckCircle2 } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Input } from \"@/components/ui/input\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport ScrollReveal from \"@/components/shared/ScrollReveal\";\nimport { supabase } from \"@/lib/supabaseClient\";",
+  "StartLine": 1,
+  "TargetContent": "\"use client\";\n\nimport React, { useState } from \"react\";\nimport Link from \"next/link\";\nimport { ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, CheckCircle2 } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Input } from \"@/components/ui/input\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport ScrollReveal from \"@/components/shared/ScrollReveal\";",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Adding supabase client import to volunteer page",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

@@ -8,6 +8,23 @@ import ScrollReveal from "@/components/shared/ScrollReveal";
 import Counter from "@/components/shared/Counter";
 
 export default function Home() {
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = React.useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const x = e.clientX - box.left;
+    const y = e.clientY - box.top;
+    
+    setMousePos({ x, y });
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -199,18 +216,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Inspirational Quote Section */}
-      <section className="py-24 bg-gradient-to-r from-[#ED1C24] to-[#D11820] text-white relative overflow-hidden rounded-3xl my-8">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
-        </div>
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-          <span className="text-7xl font-serif text-[#FFC20E] opacity-50 block mb-2 leading-none">&ldquo;</span>
-          <h2 className="text-2xl md:text-4xl lg:text-4xl font-heading font-medium leading-relaxed max-w-3xl mx-auto animate-float-slow">
-            ದೊಡ್ಡವರು ಯಾರೇ ಯಾರಿಗೇ ಆದರೂ ಕನ್ನಡ ಕಲಿಯಲು ಹೇಳಿದರೆ ಅದು ಅವರ ಅಹಂಕಾರಕ್ಕೆ ತಾಗುತ್ತದೆ. ಆದರೆ ಮಕ್ಕಳು ಮುದ್ದಾಗಿ, ಮುಗ್ಧವಾಗಿ <span className="text-[#FFC20E] font-extrabold">&apos;ನಾನು ನಿಮಗೆ ಕಲಿಸಬಹುದೇ?&apos;</span> ಎಂದರೆ ಯಾರೇ ಆದರೂ ನಿರಾಕರಿಸುವುದಿಲ್ಲ.
-          </h2>
-          <div className="w-16 h-1 bg-[#FFC20E] mx-auto rounded-full mt-10"></div>
-        </div>
+      {/* Inspirational Quote Section with Spotlight Hover Glow */}
+      <section className="py-20 bg-transparent flex justify-center px-4 sm:px-6 lg:px-8 relative print:hidden">
+        <ScrollReveal className="w-full max-w-4xl">
+          <div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="w-full bg-gradient-to-br from-[#ED1C24] via-[#D11820] to-[#991116] rounded-3xl border border-white/10 hover:border-[#FFC20E]/30 shadow-2xl p-8 sm:p-12 md:p-16 relative overflow-hidden transition-all duration-500 text-center text-white cursor-pointer select-none group"
+          >
+            {/* Spotlight Radial Gradient Glow Layer */}
+            <div 
+              className="absolute inset-0 transition-opacity duration-500 pointer-events-none z-0"
+              style={{
+                opacity: isHovered ? 1 : 0,
+                background: `radial-gradient(550px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255, 194, 14, 0.28), rgba(237, 28, 36, 0.08) 45%, transparent 80%)`
+              }}
+            />
+
+            {/* Static background blur elements */}
+            <div className="absolute -right-24 -bottom-24 w-80 h-80 rounded-full bg-[#FFC20E]/10 blur-3xl pointer-events-none z-0" />
+            <div className="absolute -left-20 -top-20 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none z-0" />
+
+            <div className="relative z-10">
+              {/* Inner quote marks */}
+              <span className="text-6xl sm:text-7xl font-serif text-[#FFC20E] opacity-75 block mb-3 leading-none transition-transform duration-300 group-hover:scale-110">
+                &ldquo;
+              </span>
+
+              {/* Quote text */}
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-heading font-medium leading-relaxed max-w-3xl mx-auto tracking-wide text-white/95 transition-colors duration-300 group-hover:text-white">
+                ದೊಡ್ಡವರು ಯಾರೇ ಯಾರಿಗೇ ಆದರೂ ಕನ್ನಡ ಕಲಿಯಲು ಹೇಳಿದರೆ ಅದು ಅವರ ಅಹಂಕಾರಕ್ಕೆ ತಾಗುತ್ತದೆ. ಆದರೆ ಮಕ್ಕಳು ಮುದ್ದಾಗಿ, ಮುಗ್ಧವಾಗಿ <span className="text-[#FFC20E] font-extrabold">&apos;ನಾನು ನಿಮಗೆ ಕಲಿಸಬಹುದೇ?&apos;</span> ಎಂದರೆ ಯಾರೇ ಆದರೂ ನಿರಾಕರಿಸುವುದಿಲ್ಲ.
+              </h2>
+
+              {/* Decorative line */}
+              <div className="w-16 h-1 bg-[#FFC20E] mx-auto rounded-full mt-8 sm:mt-12 shadow-sm transition-transform duration-500 group-hover:scale-110" />
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
     </>
   );

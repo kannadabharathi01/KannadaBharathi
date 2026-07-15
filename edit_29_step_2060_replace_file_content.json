@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Add missing Lucide icons to import list in volunteer/page.tsx",
+  "EndLine": 9,
+  "Instruction": "Include LayoutGrid, BookOpen, Settings, Sun, Moon, Menu, ChevronLeft, and ChevronRight in the lucide-react import list",
+  "ReplacementContent": "import { \n  ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, \n  CheckCircle2, Eye, EyeOff, Mail, Lock, LogOut, \n  MapPin, Calendar, Building, Sparkles, AlertCircle, FileBadge, Loader2,\n  LayoutGrid, BookOpen, Settings, Sun, Moon, Menu, ChevronLeft, ChevronRight\n} from \"lucide-react\";",
+  "StartLine": 5,
+  "TargetContent": "import { \n  ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, \n  CheckCircle2, Eye, EyeOff, Mail, Lock, LogOut, \n  MapPin, Calendar, Building, Sparkles, AlertCircle, FileBadge, Loader2 \n} from \"lucide-react\";",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Updating import list to include all required icons",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Clean up trailing braces from removed fetchUserProfile function in volunteer/page.tsx",
+  "EndLine": 133,
+  "Instruction": "Replace the trailing curly braces on lines 131-132 with correct useEffect dependency closing structure",
+  "ReplacementContent": "    return () => subscription.unsubscribe();\n  }, [router]);",
+  "StartLine": 128,
+  "TargetContent": "    return () => subscription.unsubscribe();\n  }, []);\n\n    }\n  };",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Cleaning up syntax in volunteer/page.tsx after partial delete",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

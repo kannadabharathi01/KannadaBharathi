@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Restore overflow-x-auto to custom tabs container in volunteer/page.tsx to ensure horizontal scrollability on mobile screens",
+  "EndLine": 100,
+  "Instruction": "Add overflow-x-auto back to container classes",
+  "ReplacementContent": "        <div className=\"flex flex-row items-center justify-start md:justify-center gap-2 mb-10 max-w-3xl mx-auto glass p-1.5 rounded-2xl border border-white/60 shadow-md scrollbar-none w-full flex-nowrap overflow-x-auto\">",
+  "StartLine": 97,
+  "TargetContent": "        <div className=\"flex flex-row items-center justify-start md:justify-center gap-2 mb-10 max-w-3xl mx-auto glass p-1.5 rounded-2xl border border-white/60 shadow-md scrollbar-none w-full flex-nowrap\">",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Adding overflow-x-auto to volunteer page tabs container",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

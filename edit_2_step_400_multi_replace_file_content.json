@@ -1,0 +1,28 @@
+{
+  "ArtifactMetadata": {
+    "RequestFeedback": false,
+    "Summary": "Replace DollarSign icon with IndianRupee icon in volunteer page.",
+    "UserFacing": true
+  },
+  "Description": "Replace Lucide DollarSign with IndianRupee in imports and components on volunteer/page.tsx",
+  "Instruction": "Change DollarSign imports and usage to IndianRupee on volunteer page",
+  "ReplacementChunks": [
+    {
+      "AllowMultiple": false,
+      "EndLine": 6,
+      "ReplacementContent": "import { ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, CheckCircle2 } from \"lucide-react\";",
+      "StartLine": 4,
+      "TargetContent": "import { ArrowLeft, UserPlus, Users, Award, Shield, DollarSign, CheckCircle2 } from \"lucide-react\";"
+    },
+    {
+      "AllowMultiple": false,
+      "EndLine": 112,
+      "ReplacementContent": "                { id: \"donor\", label: \"\u0ca6\u0cbe\u0ca8\u0cbf\u0c97\u0cb3\u0cc1\", icon: <IndianRupee className=\"w-4 h-4\" /> },",
+      "StartLine": 108,
+      "TargetContent": "                { id: \"donor\", label: \"\u0ca6\u0cbe\u0ca8\u0cbf\u0c97\u0cb3\u0cc1\", icon: <DollarSign className=\"w-4 h-4\" /> },"
+    }
+  ],
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Replacing dollar sign icon imports and components in volunteer/page.tsx",
+  "toolSummary": "Modify volunteer/page.tsx"
+}

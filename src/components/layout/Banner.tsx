@@ -6,26 +6,22 @@ import { supabase } from "@/lib/supabaseClient";
 
 export default function Banner() {
   const pathname = usePathname();
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
-    if (!pathname.startsWith("/volunteer/admin")) {
-      setIsAdminLoggedIn(false);
-      return;
-    }
-
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAdminLoggedIn(!!session);
+      setIsLogged(!!session);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdminLoggedIn(!!session);
+      setIsLogged(!!session);
     });
 
     return () => subscription.unsubscribe();
-  }, [pathname]);
+  }, []);
 
-  if (isAdminLoggedIn) return null;
+  const isDashboardRoute = pathname.startsWith("/volunteer/") || pathname.startsWith("/volunteer/admin");
+  if (isDashboardRoute) return null;
 
   return (
     <div className="bg-[#ED1C24] text-white text-xs sm:text-sm font-medium py-2.5 px-4 text-center tracking-wide shadow-sm relative z-50">

@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": false,
+  "Description": "Import Loader2 from lucide-react in volunteer/page.tsx",
+  "EndLine": 9,
+  "Instruction": "Add Loader2 to lucide-react imports list in page.tsx",
+  "ReplacementContent": "import { \n  ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, \n  CheckCircle2, Eye, EyeOff, Mail, Lock, LogOut, \n  MapPin, Calendar, Building, Sparkles, AlertCircle, FileBadge, Loader2 \n} from \"lucide-react\";",
+  "StartLine": 5,
+  "TargetContent": "import { \n  ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, \n  CheckCircle2, Eye, EyeOff, Mail, Lock, LogOut, \n  MapPin, Calendar, Building, Sparkles, AlertCircle, FileBadge \n} from \"lucide-react\";",
+  "TargetFile": "d:\\KannadaBharathi\\src\\app\\volunteer\\page.tsx",
+  "toolAction": "Adding Loader2 import to page.tsx",
+  "toolSummary": "Modify volunteer/page.tsx"
+}
