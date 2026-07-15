@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { 
   ArrowLeft, UserPlus, Users, Award, Shield, IndianRupee, 
@@ -46,9 +46,9 @@ const PasswordRequirements = ({ pass }: { pass: string }) => {
 
 export default function VolunteerPage() {
   const router = useRouter();
+  const isLoggingInRef = useRef(false);
   const [viewMode, setViewMode] = useState<ViewMode>("login");
   const [userSession, setUserSession] = useState<any>(null);
-  const [profileData, setProfileData] = useState<any>(null);
   
   // Tab control for registration
   const [activeTab, setActiveTab] = useState<RoleType>("learner");
@@ -105,7 +105,7 @@ export default function VolunteerPage() {
           .eq("id", session.user.id)
           .single();
         if (roleData?.role === "admin") {
-          router.replace("/volunteer/admin");
+          await supabase.auth.signOut();
         } else {
           router.replace(`/volunteer/${session.user.id}`);
         }
@@ -123,40 +123,27 @@ export default function VolunteerPage() {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
+        if (isLoggingInRef.current) return;
         const { data: roleData } = await supabase
           .from("user_roles")
           .select("role")
           .eq("id", session.user.id)
           .single();
         if (roleData?.role === "admin") {
-          router.replace("/volunteer/admin");
+          await supabase.auth.signOut();
+          setError("ಈ ಇಮೇಲ್ ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ (This email is not registered).");
         } else {
           router.replace(`/volunteer/${session.user.id}`);
         }
       } else {
         setUserSession(null);
-        setProfileData(null);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [router]);
 
-  // Fetch full volunteer details
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("user_roles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-      if (!error && data) {
-        setProfileData(data);
-      }
-    } catch (err) {
-      console.error("Error fetching user profile:", err);
-    }
-  };
+
 
   // 5 seconds redirect countdown handler
   useEffect(() => {
@@ -226,6 +213,7 @@ export default function VolunteerPage() {
     setIsSubmitting(true);
     setError(null);
     setSuccessMsg(null);
+    isLoggingInRef.current = true;
     try {
       const { data, error: loginError } = await supabase.auth.signInWithPassword({
         email: loginEmail,
@@ -243,7 +231,7 @@ export default function VolunteerPage() {
 
       if (roleData?.role === "admin") {
         await supabase.auth.signOut();
-        throw new Error("ಈ ಇಮೇಲ್ ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ ಅಥವಾ ಲಾಗಿನ್ ಮಾಡಲು ಅನುಮತಿಯಿಲ್ಲ (Email not registered or invalid portal).");
+        throw new Error("ಈ ಇಮೇಲ್ ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ (This email is not registered).");
       } else {
         setSuccessMsg("ಲಾಗಿನ್ ಯಶಸ್ವಿಯಾಗಿದೆ! ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...");
         setTimeout(() => {
@@ -254,6 +242,7 @@ export default function VolunteerPage() {
       setError(err.message || "ಲಾಗಿನ್ ವಿಫಲವಾಗಿದೆ. ಇಮೇಲ್ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.");
     } finally {
       setIsSubmitting(false);
+      isLoggingInRef.current = false;
     }
   };
 
@@ -561,7 +550,6 @@ export default function VolunteerPage() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUserSession(null);
-    setProfileData(null);
     setViewMode("login");
     resetForm();
   };
