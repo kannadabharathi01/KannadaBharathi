@@ -177,7 +177,9 @@ export default function VolunteerDashboardPage({ params }: { params: Promise<{ i
                { id: "dashboard", label: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್", icon: <LayoutGrid className="w-4 h-4" /> },
                { id: "profile", label: "ನನ್ನ ವಿವರಗಳು", icon: <UserPlus className="w-4 h-4" /> },
                { id: "linked", label: "ಸಂಬಂಧಿತ ಸದಸ್ಯರು", icon: <Users className="w-4 h-4" /> },
-               { id: "syllabus", label: "ಕಲಿಕಾ ಪಠ್ಯಕ್ರಮ", icon: <BookOpen className="w-4 h-4" /> },
+               ...(profileData.role === "learner" || profileData.role === "teacher"
+                 ? [{ id: "syllabus", label: "ಕಲಿಕಾ ಪಠ್ಯಕ್ರಮ", icon: <BookOpen className="w-4 h-4" /> }]
+                 : []),
                { id: "settings", label: "ಖಾತೆ ಸೆಟ್ಟಿಂಗ್ಸ್", icon: <Settings className="w-4 h-4" /> },
              ].map((item) => {
                const isActive = activeView === item.id;

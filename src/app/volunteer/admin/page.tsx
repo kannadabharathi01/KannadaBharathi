@@ -7,11 +7,11 @@ import { Input } from "@/components/ui/input";
 import { 
   Shield, LogOut, Loader2, Users, UserCheck, 
   Award, Heart, Menu, X, ChevronLeft, ChevronRight, 
-  Sun, Moon, LayoutGrid, Settings, Send, Save, Eye, EyeOff
+  Sun, Moon, LayoutGrid, Settings, Send, Save, Eye, EyeOff, FileBadge
 } from "lucide-react";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 
-type ActiveView = "learner" | "teacher" | "mentor" | "organizer" | "donor" | "settings";
+type ActiveView = "learner" | "teacher" | "mentor" | "organizer" | "donor" | "mla" | "settings";
 
 export default function AdminPage() {
   const [email, setEmail] = useState("");
@@ -152,6 +152,7 @@ export default function AdminPage() {
     mentor: 0,
     organizer: 0,
     donor: 0,
+    mla: 0,
   });
 
   // Dark/Light Mode Management
@@ -249,7 +250,7 @@ export default function AdminPage() {
 
   const fetchStats = async () => {
     try {
-      const roles: ("learner" | "teacher" | "mentor" | "organizer" | "donor")[] = ["learner", "teacher", "mentor", "organizer", "donor"];
+      const roles: ("learner" | "teacher" | "mentor" | "organizer" | "donor" | "mla")[] = ["learner", "teacher", "mentor", "organizer", "donor", "mla"];
       const newStats = { ...stats };
       for (const r of roles) {
         const { count, error } = await supabase
@@ -323,6 +324,7 @@ export default function AdminPage() {
     { id: "mentor", label: "ಮಾರ್ಗದರ್ಶಕರು", icon: <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no"><Award className="w-4 h-4" /></span> },
     { id: "organizer", label: "ಸಂಘಟಕರು", icon: <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no"><Shield className="w-4 h-4" /></span> },
     { id: "donor", label: "ದಾನಿಗಳು", icon: <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no"><Heart className="w-4 h-4" /></span> },
+    { id: "mla", label: "ಜನಪ್ರತಿನಿಧಿ (MLA)", icon: <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no"><FileBadge className="w-4 h-4" /></span> },
     { id: "settings", label: "ಸೆಟ್ಟಿಂಗ್ಸ್", icon: <span className="notranslate flex-shrink-0 flex items-center justify-center" translate="no"><Settings className="w-4 h-4" /></span> },
   ];
 
@@ -766,13 +768,14 @@ export default function AdminPage() {
             ) : (
               <>
                 {/* Realtime Statistics cards (Small Text Sizes) */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5 mb-6">
+                <div className="grid grid-cols-2 md:grid-cols-6 gap-3.5 mb-6">
                   {[
                     { label: "ಕಲಿಯುವವರು", count: stats.learner, icon: <Users className="w-3.5 h-3.5 text-blue-600" />, bg: "bg-blue-50/50 border-blue-150/40 dark:bg-blue-950/10 dark:border-blue-900/40 text-blue-700 dark:text-blue-400" },
                     { label: "ಕಲಿಸುವ ಮಕ್ಕಳು", count: stats.teacher, icon: <UserCheck className="w-3.5 h-3.5 text-emerald-600" />, bg: "bg-emerald-50/50 border-emerald-150/40 dark:bg-emerald-950/10 dark:border-emerald-900/40 text-emerald-700 dark:text-emerald-400" },
                     { label: "ಮಾರ್ಗದರ್ಶಕರು", count: stats.mentor, icon: <Award className="w-3.5 h-3.5 text-purple-600" />, bg: "bg-purple-50/50 border-purple-150/40 dark:bg-purple-950/10 dark:border-purple-900/40 text-purple-700 dark:text-purple-400" },
                     { label: "ಸಂಘಟಕರು", count: stats.organizer, icon: <Shield className="w-3.5 h-3.5 text-rose-600" />, bg: "bg-rose-50/50 border-rose-150/40 dark:bg-rose-950/10 dark:border-rose-900/40 text-rose-700 dark:text-rose-400" },
                     { label: "ದಾನಿಗಳು", count: stats.donor, icon: <Heart className="w-3.5 h-3.5 text-amber-600" />, bg: "bg-amber-50/50 border-amber-150/40 dark:bg-amber-950/10 dark:border-amber-900/40 text-amber-700 dark:text-amber-400" },
+                    { label: "ಜನಪ್ರತಿನಿಧಿ (MLA)", count: stats.mla, icon: <FileBadge className="w-3.5 h-3.5 text-orange-500" />, bg: "bg-orange-50/50 border-orange-150/40 dark:bg-orange-950/10 dark:border-orange-900/40 text-orange-700 dark:text-orange-400" },
                   ].map((stat, idx) => (
                     <div key={idx} className={`glass dark:glass-dark p-4 rounded-xl border ${stat.bg} shadow-sm flex flex-col justify-between transition-all hover:scale-[1.02] duration-200`}>
                       <div className="flex items-center justify-between mb-1.5">
@@ -836,6 +839,12 @@ export default function AdminPage() {
                                   <th className="py-3 px-3">ಲಿಂಕ್ಡ್ TCH ID</th>
                                 </>
                               )}
+                              {activeView === "mla" && (
+                                <>
+                                  <th className="py-3 px-3">ರಾಜಕೀಯ ಪಕ್ಷ</th>
+                                  <th className="py-3 px-3">ಕಚೇರಿ ವಿಳಾಸ</th>
+                                </>
+                              )}
                               <th className="py-3 px-3">ದಾಖಲಾದ ದಿನಾಂಕ</th>
                             </tr>
                           </thead>
@@ -875,6 +884,12 @@ export default function AdminPage() {
                                   <>
                                     <td className="py-2.5 px-3">{row.school}</td>
                                     <td className="py-2.5 px-3 text-amber-600 dark:text-amber-400 font-bold">{row.linked_id_1}</td>
+                                  </>
+                                )}
+                                {activeView === "mla" && (
+                                  <>
+                                    <td className="py-2.5 px-3">{row.occupation}</td>
+                                    <td className="py-2.5 px-3">{row.native_place}</td>
                                   </>
                                 )}
                                 <td className="py-2.5 px-3 text-gray-400 dark:text-gray-500 text-[10px]">
